@@ -1,193 +1,54 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const PILLARS = [
-  {
-    icon: "🧠",
-    tag: "单词才是硬通货",
-    title: "AI单词速记",
-    desc: "以海马体记忆为理论，10个一组、60词/小时，多形式强化记忆，3天背完3年单词。",
-    price: "按书籍单词量收费",
-    points: ["海马体速记 + 词性拆解", "现场抽测，效果可见", "口号：相信自己可以创造奇迹"],
-  },
-  {
-    icon: "🎯",
-    tag: "只学不会的",
-    title: "AI满分导航",
-    desc: "AI测试定位薄弱点→生成报告→规划专属学习路径，只学不会的，不浪费一分钟。",
-    price: "699 元 / 科 / 月",
-    points: ["知识测试 + 定制报告", "知识视频 + 针对练习", "可叠加真人伴学（可选）"],
-  },
-  {
-    icon: "📝",
-    tag: "考试有技巧",
-    title: "AI中高考答题技巧",
-    desc: "命题人视角总结高频考点答题技巧，会题快10倍，不会题也能做对。",
-    price: "699 元 / 科 / 月",
-    points: ["中高考高频考点", "快速答题技巧体系", "口号：只学要考的"],
-  },
-  {
-    icon: "🤝",
-    tag: "三种伴学形式",
-    title: "AI智能伴学系统",
-    desc: "排除走神、不懂装懂等不良因素，提供有监督的伴学服务，自主选择形式。",
-    price: "线下 180元/小时 · 线上 150元/90分钟",
-    points: ["AI伴学（免费）", "线上伴学（真人）", "线下伴学（真人面对面）"],
-  },
-];
-
-const PROBLEMS = [
-  {
-    title: "AI满分导航 · 解决盲目学习",
-    items: [
-      "盲目学习导致精力浪费、效果低下，引发厌学逆反",
-      "上了很多班/一对一成绩仍不提升，又不敢停",
-      "中高考前几个月，缺的多却不知从哪补起",
-    ],
-  },
-  {
-    title: "AI单词速记 · 激活海马体",
-    items: [
-      "多种原因导致的单词记忆困难",
-      "没方法讨厌单词，词汇量严重不达标",
-      "单词是12年累计的“硬通货”，影响全学科",
-    ],
-  },
-  {
-    title: "中高考答题技巧 · 直接提分",
-    items: [
-      "临近中高考的考前突击",
-      "得分率卡在90%无法突破的优等生",
-      "中高难度题目拿不到分",
-    ],
-  },
-  {
-    title: "AI智能伴学 · 保障效率",
-    items: [
-      "排除走神、不懂装懂、注意力不集中",
-      "学习问题不能解决、方法不正确",
-      "学习总结不到位、过程枯燥",
-    ],
-  },
-];
-
-const FREE_LEADS = [
+const FREE_EXP = [
   {
     type: "学习力免费体检",
     leadSelect: "学习力体检",
-    kind: "free",
-    price: "0 元",
-    unit: "20 分钟",
-    slogan: "孩子和学霸之间只差这份体检报告",
-    lines: ["数学/英语/物理/化学", "知识·能力·技巧三维体检", "最短路径 + 最小内容建议"],
-    items: ["全面体检报告", "专属学习建议"],
+    desc: "数学/英语/物理/化学，知识·能力·技巧三维体检，20 分钟看清问题",
+    tag: "20 分钟",
   },
   {
-    type: "免费单词速记体验",
+    type: "免费 AI 单词速记体验",
     leadSelect: "单词速记体验",
-    kind: "free",
-    price: "0 元",
-    unit: "20 分钟",
-    slogan: "3天时间背完3年单词",
-    lines: ["学习生词约20个", "海马体 + 词性拆解速记法", "现场抽测 + 复习文件"],
-    items: ["不是记不住，是方法错了", "单词是12年学习的硬通货"],
+    desc: "现场学约 20 个生词，海马体+词性拆解速记法，当场抽测",
+    tag: "20 分钟",
   },
   {
-    type: "免费中考技巧体验",
+    type: "免费中高考技巧体验",
     leadSelect: "中考技巧体验",
-    kind: "free",
-    price: "0 元",
-    unit: "20 分钟",
-    slogan: "会题快10倍，不会题能做对",
-    lines: ["体验3个技巧，当场感受", "中考技巧对应图", "数学/英语/物理/化学"],
-    items: ["学习有方法，考试有技巧", "学霸都在用，只是你不知道"],
-  },
-];
-
-const PAID_LEADS = [
-  {
-    type: "线下1对1单词速记课",
-    kind: "paid",
-    price: "49.9 元",
-    unit: "60分钟+7天打卡",
-    slogan: "3天时间背完3年单词",
-    lines: ["约60个生词", "海马体+词性拆解速记法", "现场抽测 + 复习文件"],
-  },
-  {
-    type: "线下1对1学科检测+规划",
-    kind: "paid",
-    price: "19.9 元",
-    unit: "60 分钟",
-    slogan: "只学不会的，最少、质优、效果好",
-    lines: ["数学/英语/物理/化学", "三维全面体检", "报告解读 + 学习方案规划"],
-  },
-  {
-    type: "线下1对1中考技巧",
-    kind: "paid",
-    price: "69.9 元",
-    unit: "60 分钟",
-    slogan: "会题快10倍，不会题能做对",
-    lines: ["中考压轴题模型", "中考技巧对应图", "数学/英语/物理/化学"],
-  },
-  {
-    type: "线上1对1单词速记课",
-    kind: "paid",
-    price: "49.9 元",
-    unit: "60分钟+抗遗忘",
-    slogan: "3天时间背完3年单词",
-    lines: ["约30个生词", "1次正课+2次抗遗忘", "现场抽测 + 复习文件"],
-  },
-  {
-    type: "线上1对1学习课",
-    kind: "paid",
-    price: "59.9 元",
-    unit: "60+30 分钟",
-    slogan: "数学/英语/物理/化学",
-    lines: ["1次正课 + 1次复习课", "精准定位薄弱点"],
-  },
-  {
-    type: "198全家桶 / 新人99",
-    kind: "paid",
-    price: "198 / 99 元",
-    unit: "超值组合",
-    slogan: "全家桶原价948.5，仅198",
-    lines: ["线上+线下多节1对1", "一个月系统使用", "新人99/月/科（限1次）"],
+    desc: "体验 3 个答题技巧，数学/英语/物理/化学，当场感受提分",
+    tag: "20 分钟",
   },
 ];
 
 const CAMPUSES = [
-  { name: "桥西校区", addr: "益友百货B座12层", teacher: "于老师", phone: "18631199225" },
-  { name: "新华校区", addr: "28中对面", teacher: "李老师", phone: "18633499596" },
-  { name: "长安校区", addr: "翟营大街上东领寓B座6层", teacher: "刘老师", phone: "13073112715" },
-  { name: "高新校区", addr: "黄河大道118号新华大厦17层", teacher: "崔老师", phone: "13223402764" },
+  { name: "历下校区", addr: "历下区·花园路·xx 号", tel: "155 5319 1968" },
+  { name: "市中校区", addr: "市中区·经四路·xx 号", tel: "155 5319 1968" },
+  { name: "槐荫校区", addr: "槐荫区·经十路·xx 号", tel: "155 5319 1968" },
+  { name: "天桥校区", addr: "天桥区·无影山·xx 号", tel: "155 5319 1968" },
 ];
-
-const TIMELINE = [
-  { y: "2015—2019", t: "作业辅导", d: "面向家长的公众号，服务中小学生作业辅导" },
-  { y: "2019—2022", t: "校内系统", d: "面向学校老师的校内学习管理系统建设" },
-  { y: "2022—2026", t: "AI极智考", d: "AI赋能学习全过程，助力高效学习、快速提分" },
-];
-
-function smoothTo(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-}
 
 export default function Page() {
-  const [navOpen, setNavOpen] = useState(false);
+  const [menu, setMenu] = useState(false);
   const [form, setForm] = useState({
-    leadType: "学习力体检",
-    subject: "数学",
-    campus: "桥西校区",
-    phone: "",
     name: "",
+    phone: "",
     grade: "",
+    campus: "",
+    leadType: "学习力体检",
+    note: "",
   });
-  const [msg, setMsg] = useState({ type: "", text: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [msg, setMsg] = useState(null); // { type: "ok" | "err", text }
+
+  const smoothTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -199,357 +60,610 @@ export default function Page() {
       },
       { threshold: 0.12 }
     );
-    els.forEach((el) => io.observe(el));
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
 
-  async function submit(e) {
+  const submit = async (e) => {
     e.preventDefault();
+    setMsg(null);
+    if (!/^1[3-9]\d{9}$/.test(form.phone)) {
+      setMsg({ type: "err", text: "请输入正确的 11 位手机号" });
+      return;
+    }
+    if (!form.campus) {
+      setMsg({ type: "err", text: "请选择意向校区" });
+      return;
+    }
     setSubmitting(true);
-    setMsg({ type: "", text: "" });
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name || "未填写",
+          phone: form.phone,
+          grade: form.grade || "未填写",
+          campus: form.campus,
+          leadType: form.leadType,
+          note: form.note || "",
+        }),
       });
       const data = await res.json();
-      if (data.ok) {
-        setMsg({ type: "ok", text: data.msg || "提交成功！" });
-        setForm((f) => ({ ...f, phone: "", name: "", grade: "" }));
+      if (res.ok) {
+        setMsg({ type: "ok", text: "预约成功！老师会尽快与您联系，请保持手机畅通 📞" });
+        setForm((f) => ({ ...f, name: "", phone: "", grade: "", note: "" }));
       } else {
-        setMsg({ type: "err", text: data.msg || "提交失败，请稍后再试" });
+        setMsg({ type: "err", text: data.error || "提交失败，请稍后重试或直接拨打老师电话" });
       }
     } catch {
-      setMsg({ type: "err", text: "网络异常，请稍后再试" });
+      setMsg({ type: "err", text: "网络异常，请稍后重试或直接拨打老师电话" });
     } finally {
       setSubmitting(false);
     }
-  }
+  };
 
   return (
     <>
-      {/* ===== Header ===== */}
-      <header className="site-header">
-        <div className="container nav">
-          <a className="brand" href="#top" onClick={(e) => { e.preventDefault(); smoothTo("top"); }}>
-            <span className="logo">慧</span>
-            <span>
-              慧速学AI伴学中心
-              <small>AI赋能学习 · 提分立杆见影</small>
-            </span>
+      {/* 固定导航 */}
+      <header className="nav">
+        <div className="container nav-inner">
+          <a className="brand" href="#home" onClick={(e) => { e.preventDefault(); smoothTo("home"); }}>
+            <span className="brand-mark">慧</span>
+            <span className="brand-text">慧速学<small>AI 伴学中心</small></span>
           </a>
-          <nav className={`nav-links ${navOpen ? "open" : ""}`}>
-            <a href="#business" onClick={() => setNavOpen(false)}>核心业务</a>
-            <a href="#mode" onClick={() => setNavOpen(false)}>学习模式</a>
-            <a href="#free" onClick={() => setNavOpen(false)}>免费体验</a>
-            <a href="#campus" onClick={() => setNavOpen(false)}>校区联系</a>
+          <nav className={`nav-links ${menu ? "open" : ""}`}>
+            <a href="#why" onClick={(e) => { e.preventDefault(); smoothTo("why"); setMenu(false); }}>学习方法</a>
+            <a href="#nav" onClick={(e) => { e.preventDefault(); smoothTo("nav"); setMenu(false); }}>核心业务</a>
+            <a href="#proof" onClick={(e) => { e.preventDefault(); smoothTo("proof"); setMenu(false); }}>提分效果</a>
+            <a href="#campus" onClick={(e) => { e.preventDefault(); smoothTo("campus"); setMenu(false); }}>校区</a>
+            <a className="nav-cta" href="#signup" onClick={(e) => { e.preventDefault(); smoothTo("signup"); setMenu(false); }}>免费体验</a>
           </nav>
-          <div className="nav-cta">
-            <a className="btn btn-primary" href="#signup" onClick={(e) => { e.preventDefault(); smoothTo("signup"); }}>免费预约体验</a>
-            <button className="nav-toggle" aria-label="菜单" onClick={() => setNavOpen((v) => !v)}>☰</button>
-          </div>
+          <button className="nav-toggle" aria-label="菜单" onClick={() => setMenu((m) => !m)}>
+            <span /><span /><span />
+          </button>
         </div>
       </header>
 
-      {/* ===== Hero ===== */}
-      <section className="hero" id="top">
+      {/* 1. 首屏品牌 */}
+      <section className="screen hero" id="home">
         <div className="container hero-grid">
-          <div>
-            <div className="section-head" style={{ textAlign: "left", margin: "0 0 18px" }}>
-              <span className="eyebrow">中学全科托管 · AI极智考</span>
-            </div>
-            <h1>
-              用 <span className="hl">AI</span> 赋能学习全过程<br />
-              让每一分努力都有<span className="hl">分数回报</span>
-            </h1>
-            <div className="slogans">
-              <span>AI赋能学习 提分立杆见影</span>
-              <span>学习有方法 考试有技巧</span>
-              <span>只学不会的</span>
-            </div>
+          <div className="hero-text">
+            <span className="eyebrow">中学全科 · AI 智能伴学</span>
+            <h1>AI 精准分析<br />个性化规划<br />真人伴学</h1>
             <p className="lead">
-              慧速学AI伴学中心采用「AI规划 + 真人伴学」模式，用明确结果验证学习效果——
-              单词背完由家长抽测达标才算交付，精准学完成由试卷测评达标才算完成。
+              慧速学用 AI 赋能学习全过程：精准诊断知识漏洞、生成专属学习路径，并由真人老师陪伴落地。
+              不是更努力，而是更聪明地学习。
             </p>
-            <div className="hero-actions">
-              <a className="btn btn-primary" href="#signup" onClick={(e) => { e.preventDefault(); smoothTo("signup"); }}>立即免费体验 20 分钟</a>
-              <a className="btn btn-ghost" href="#business" onClick={(e) => { e.preventDefault(); smoothTo("business"); }}>了解四大业务</a>
-            </div>
-            <div className="hero-stats">
-              <div className="stat"><strong>500+</strong><span>累计服务学员</span></div>
-              <div className="stat"><strong>50+</strong><span>中考提分（分）</span></div>
-              <div className="stat"><strong>200+</strong><span>单词速记服务</span></div>
-              <div className="stat"><strong>4</strong><span>直营校区</span></div>
+            <div className="hero-cta">
+              <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "学习力体检" })); smoothTo("signup"); }}>免费预约体验</a>
+              <a className="btn btn-ghost-light" href="#why" onClick={(e) => { e.preventDefault(); smoothTo("why"); }}>了解方法</a>
             </div>
           </div>
-
-          <div className="hero-card reveal">
-            <h3>四大核心业务</h3>
-            <p className="sub">覆盖「记单词 · 补薄弱 · 练技巧 · 强伴学」全链路</p>
-            <div className="mini-services">
-              <div className="ms"><span className="ico">🧠</span><div><b>AI单词速记</b><small>3天背完3年单词</small></div></div>
-              <div className="ms"><span className="ico">🎯</span><div><b>AI满分导航</b><small>699/科/月 · 只学不会的</small></div></div>
-              <div className="ms"><span className="ico">📝</span><div><b>AI中高考答题技巧</b><small>699/科/月 · 会题快10倍</small></div></div>
-              <div className="ms"><span className="ico">🤝</span><div><b>AI智能伴学系统</b><small>线上150 / 线下180</small></div></div>
+          <div className="hero-visual">
+            <div className="report-card">
+              <div className="rc-head">
+                <span>学习力诊断报告</span>
+                <span className="rc-score">86<small>分</small></span>
+              </div>
+              <div className="rc-bars">
+                <div className="rc-bar"><i style={{ width: "82%" }} /><span>英语</span></div>
+                <div className="rc-bar"><i style={{ width: "64%" }} /><span>数学</span></div>
+                <div className="rc-bar"><i style={{ width: "73%" }} /><span>物理</span></div>
+                <div className="rc-bar"><i style={{ width: "58%" }} /><span>化学</span></div>
+              </div>
+              <div className="rc-path">
+                <span>最短提分路径</span>
+                <div className="rc-steps">
+                  <em>补缺</em><em>技巧</em><em>巩固</em><em>冲刺</em>
+                </div>
+              </div>
             </div>
+            <div className="hud">
+              <span>AI 学习力诊断 · 实时生成</span>
+            </div>
+          </div>
+        </div>
+        <div className="container">
+          <div className="screen-img reveal">
+            <img src="/img/A_modern_AI_education_technolo_2026-07-27T14-58-59.png" alt="AI 智能学习场景" loading="lazy" />
+            <span className="cap">AI 精准分析 + 真人伴学，让每一分努力都有回报</span>
           </div>
         </div>
       </section>
 
-      {/* ===== 四大核心业务 ===== */}
-      <section id="business">
+      {/* 2. 家长痛点 */}
+      <section className="screen" id="pain">
         <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">核心业务</span>
-            <h2>四大业务，精准解决学习痛点</h2>
-            <p>AI规划 + 真人伴学，从单词、薄弱点到答题技巧，再到全程监督陪伴。</p>
+          <div className="section-head">
+            <span className="kicker">为什么孩子努力却没效果</span>
+            <h2>不是孩子不努力，是方法没找对</h2>
           </div>
-          <div className="cards">
-            {PILLARS.map((p) => (
-              <div className="card reveal" key={p.title}>
-                <div className="top">
-                  <span className="badge">{p.icon}</span>
-                  <div>
-                    <h3>{p.title}</h3>
-                    <span className="tag">{p.tag}</span>
-                  </div>
-                </div>
-                <p>{p.desc}</p>
-                <span className="price">{p.price}</span>
-                <ul>{p.points.map((x) => <li key={x}>{x}</li>)}</ul>
+          <div className="screen-img reveal">
+            <img src="/img/A_worried_Chinese_parent_and_c_2026-07-27T14-59-01.png" alt="家长与孩子的学习焦虑" loading="lazy" />
+            <span className="cap">很多努力，却看不到提升——问题往往不在努力，而在方法</span>
+          </div>
+          <div className="pain-grid">
+            {[
+              { t: "熬夜刷题成绩却原地踏步", d: "时间花了，分数没动，越学越没信心" },
+              { t: "报了很多班还是不会做", d: "大班统一讲，孩子听不懂的没人补" },
+              { t: "知识点越漏越多", d: "前面没懂，后面更难，恶性循环" },
+              { t: "考试总是发挥失常", d: "会做的丢分，不会的干瞪眼" },
+            ].map((p) => (
+              <div className="pain-card reveal" key={p.t}>
+                <div className="pain-ico">!</div>
+                <h3>{p.t}</h3>
+                <p>{p.d}</p>
               </div>
             ))}
           </div>
+          <p className="pain-quote reveal">真正的差距，不是谁更努力，而是谁先看清问题。</p>
         </div>
       </section>
 
-      {/* ===== 核心学习模式 ===== */}
-      <section id="mode" className="section-alt">
+      {/* 3. 解决方案 */}
+      <section className="screen dark" id="why">
         <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">核心学习模式</span>
-            <h2>AI规划 + 真人伴学 = 1+1&gt;2</h2>
-            <p>既具备 AI 的客观、精准、高效，又具备真人的互动、情绪调节与及时点拨。</p>
+          <div className="section-head light">
+            <span className="kicker">慧速学的解法</span>
+            <h2>先看清问题，再精准解决</h2>
+          </div>
+          <div className="screen-img reveal">
+            <img src="/img/Split_comparison_illustration__2026-07-27T14-59-02.png" alt="传统学习 vs AI 学习" loading="lazy" />
+            <span className="cap">从「老师讲什么学什么」，到「先发现问题再精准学习」</span>
+          </div>
+          <div className="vs-wrap">
+            <div className="vs-card vs-old reveal">
+              <h3>传统方式</h3>
+              <ul>
+                <li>老师讲什么，孩子学什么</li>
+                <li>大量重复已会的内容</li>
+                <li>漏洞靠考试才发现</li>
+                <li>提分慢、效率低</li>
+              </ul>
+            </div>
+            <div className="vs-mid reveal">VS</div>
+            <div className="vs-card vs-new reveal">
+              <h3>慧速学 AI 伴学</h3>
+              <ul>
+                <li>AI 先检测知识漏洞</li>
+                <li>只学不会的内容</li>
+                <li>学习路径实时调整</li>
+                <li>真人伴学落地执行</li>
+              </ul>
+            </div>
+          </div>
+          <div className="flow reveal">
+            <div className="flow-step"><span>01</span>精准检测</div>
+            <div className="flow-step"><span>02</span>个性规划</div>
+            <div className="flow-step"><span>03</span>真人伴学</div>
+            <div className="flow-step"><span>04</span>效果追踪</div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. 核心模式 */}
+      <section className="screen" id="mode">
+        <div className="container">
+          <div className="section-head">
+            <span className="kicker">核心模式</span>
+            <h2>AI 规划 + 真人伴学 = 1 + 1 &gt; 2</h2>
+            <p className="sub">AI 负责精准与效率，真人负责陪伴与落地，两者缺一不可。</p>
+          </div>
+          <div className="screen-img reveal">
+            <img src="/img/A_human_tutor_or_teacher_guidi_2026-07-27T14-59-03.png" alt="真人老师陪伴指导" loading="lazy" />
+            <span className="cap">AI 精准规划 + 真人老师陪伴，学习效果 1+1&gt;2</span>
           </div>
           <div className="mode-grid">
-            <div className="mode-visual reveal">
-              <div className="flow">
-                <div className="node"><span className="dot" /> <div><b>AI 智能规划</b><span style={{ display: "block", color: "var(--muted)", fontSize: 12 }}>客观 · 精准 · 高效定位薄弱点</span></div></div>
-                <div className="plus">＋</div>
-                <div className="node"><span className="dot" style={{ background: "var(--accent)" }} /> <div><b>真人同步伴学</b><span style={{ display: "block", color: "var(--muted)", fontSize: 12 }}>互动 · 点拨 · 情绪与状态调节</span></div></div>
+            <div className="mode-card reveal">
+              <div className="mode-ico ai">AI</div>
+              <h3>AI 精准规划</h3>
+              <p>检测漏洞、生成最短提分路径、智能推送练习与复习，让学习有迹可循。</p>
+            </div>
+            <div className="mode-card reveal">
+              <div className="mode-ico person">师</div>
+              <h3>真人伴学落地</h3>
+              <p>一线老师与专业伴学师陪伴执行，答疑解惑、督促节奏、调整状态。</p>
+            </div>
+            <div className="mode-card reveal">
+              <div className="mode-ico family">家</div>
+              <h3>家长看得见的成长</h3>
+              <p>学习报告同步家长，每次进步都清晰可见，不再焦虑等待考试成绩。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. AI 满分导航 */}
+      <section className="screen" id="nav">
+        <div className="container">
+          <div className="screen-img reveal">
+            <img src="/img/A_glowing_AI_analytics_dashboa_2026-07-27T14-59-04.png" alt="AI 学习分析报告" loading="lazy" />
+            <span className="cap">AI 满分导航：先检测、再规划，只学不会的内容</span>
+          </div>
+          <div className="biz reveal">
+            <div className="biz-text">
+              <span className="kicker">核心业务 01</span>
+              <h2>AI 满分导航</h2>
+              <p className="price">699 元 / 科 / 月</p>
+              <p className="desc">AI 精准检测知识漏洞，按「最短路径、最小内容」生成专属学习规划，只学不会的，把时间花在提分最快的地方。</p>
+              <ul className="biz-points">
+                <li>知识·能力·技巧三维检测</li>
+                <li>每日学习任务智能推送</li>
+                <li>错题归因 + 同类题强化</li>
+                <li>真人伴学师跟踪执行</li>
+              </ul>
+              <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "AI满分导航" })); smoothTo("signup"); }}>预约免费体验</a>
+            </div>
+            <div className="biz-media">
+              <div className="media-card">
+                <div className="mc-title">本周学习路径</div>
+                <div className="mc-row"><span>函数零点</span><b className="hot">重点补</b></div>
+                <div className="mc-row"><span>几何证明</span><b>巩固</b></div>
+                <div className="mc-row"><span>概率统计</span><b>已掌握</b></div>
+                <div className="mc-foot">预计节省 60% 重复练习</div>
               </div>
             </div>
-            <div className="mode-list reveal">
-              <div className="item"><span className="k">师</span><div><b>一线老师</b><span>一线机构/学校多年教学经验老师</span></div></div>
-              <div className="item"><span className="k">研</span><div><b>专业伴学师</b><span>经会数学认证与培训的专业研究生</span></div></div>
-              <div className="item"><span className="k">家</span><div><b>学生家长</b><span>经中心培训可对自家孩子家庭伴学</span></div></div>
-              <div className="item"><span className="k">✓</span><div><b>过程透明</b><span>摈弃评价不准、内容不精准、过程不透明</span></div></div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. 看见问题（学习报告） */}
+      <section className="screen" id="report">
+        <div className="container">
+          <div className="screen-img reveal">
+            <img src="/img/A_detailed_math_diagnostic_rep_2026-07-27T14-59-50.png" alt="数学能力诊断报告" loading="lazy" />
+            <span className="cap">用报告看清：孩子哪里薄弱、为什么失分、如何提升</span>
+          </div>
+          <div className="biz rev reveal">
+            <div className="biz-media">
+              <div className="media-card report">
+                <div className="mc-title">学习力诊断报告</div>
+                <div className="mc-bar"><i style={{ width: "48%" }} /><span>知识掌握 48%</span></div>
+                <div className="mc-bar"><i style={{ width: "62%" }} /><span>解题能力 62%</span></div>
+                <div className="mc-bar"><i style={{ width: "55%" }} /><span>答题技巧 55%</span></div>
+                <div className="mc-foot">薄弱点：函数 · 受力分析 · 完形逻辑</div>
+              </div>
+            </div>
+            <div className="biz-text">
+              <span className="kicker">核心业务 02</span>
+              <h2>看见真问题</h2>
+              <p className="desc">一份报告，把「学不会」说清楚：是知识没懂、能力不够，还是技巧不会。问题看得见，提分才可行。</p>
+              <ul className="biz-points">
+                <li>三维诊断，定位真因</li>
+                <li>薄弱点清单化</li>
+                <li>给最短学习路径</li>
+                <li>家长老师同频跟进</li>
+              </ul>
+              <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "学习力体检" })); smoothTo("signup"); }}>免费做一次体检</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== 解决什么问题 ===== */}
-      <section id="problems">
+      {/* 7. AI 单词速记 */}
+      <section className="screen" id="word">
         <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">解决什么问题</span>
-            <h2>不是不努力，是方法错了</h2>
-            <p>每一个业务都对应一类真实的学习困境。</p>
+          <div className="screen-img reveal">
+            <img src="/img/A_teenage_student_memorizing_E_2026-07-27T14-59-32.png" alt="AI 单词速记" loading="lazy" />
+            <span className="cap">海马体记忆法，3 天背完 3 年核心单词</span>
           </div>
-          <div className="problems">
-            {PROBLEMS.map((p) => (
-              <div className="problem reveal" key={p.title}>
-                <h4>{p.title}</h4>
-                <ul>{p.items.map((x) => <li key={x}>{x}</li>)}</ul>
+          <div className="biz reveal">
+            <div className="biz-text">
+              <span className="kicker">核心业务 03</span>
+              <h2>AI 单词速记</h2>
+              <p className="desc">用海马体记忆规律 + 词性拆解 + 智能复习曲线，告别死记硬背。单词是 12 年学习的硬通货，记不住，先换方法。</p>
+              <ul className="biz-points">
+                <li>每小时掌握约 60 个生词</li>
+                <li>词根词性拆解，记得牢</li>
+                <li>遗忘点智能提醒复习</li>
+                <li>3 天体验，当场抽测</li>
+              </ul>
+              <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "单词速记体验" })); smoothTo("signup"); }}>预约单词体验</a>
+            </div>
+            <div className="biz-media">
+              <div className="media-card">
+                <div className="mc-title">今日速记</div>
+                <div className="mc-row"><span>abandon → 放弃</span><b className="hot">新学</b></div>
+                <div className="mc-row"><span>benefit → 益处</span><b className="hot">新学</b></div>
+                <div className="mc-row"><span>consider → 考虑</span><b>复习</b></div>
+                <div className="mc-foot">已掌握 120 / 今日目标 60</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. AI 中高考答题技巧 */}
+      <section className="screen" id="exam">
+        <div className="container">
+          <div className="screen-img reveal">
+            <img src="/img/A_student_taking_an_exam_with__2026-07-27T14-59-33.png" alt="中高考答题技巧" loading="lazy" />
+            <span className="cap">会题做得更快，不会题也能提高得分率</span>
+          </div>
+          <div className="biz rev reveal">
+            <div className="biz-media">
+              <div className="media-card">
+                <div className="mc-title">答题技巧对应图</div>
+                <div className="mc-row"><span>选择题</span><b className="hot">排除·代入</b></div>
+                <div className="mc-row"><span>填空题</span><b>逆向·特值</b></div>
+                <div className="mc-row"><span>大题</span><b>步骤·踩分</b></div>
+                <div className="mc-foot">数学/英语/物理/化学 通用</div>
+              </div>
+            </div>
+            <div className="biz-text">
+              <span className="kicker">核心业务 04</span>
+              <h2>AI 中高考答题技巧</h2>
+              <p className="price">699 元 / 科 / 月</p>
+              <p className="desc">学习有方法，考试有技巧。会做的题做得更快更准，暂时不会的题也能用技巧多拿分。学霸都在用，只是你不知道。</p>
+              <ul className="biz-points">
+                <li>选择题快速排除法</li>
+                <li>大题步骤踩分术</li>
+                <li>时间分配与检查策略</li>
+                <li>真题实战演练</li>
+              </ul>
+              <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "中考技巧体验" })); smoothTo("signup"); }}>预约技巧体验</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. AI 智能伴学系统 */}
+      <section className="screen" id="banxue">
+        <div className="container">
+          <div className="section-head">
+            <span className="kicker">核心业务 05</span>
+            <h2>AI 智能伴学系统</h2>
+            <p className="sub">一套系统，三种陪伴方式，让孩子随时有人管、有人教、有人陪。</p>
+          </div>
+          <div className="screen-img reveal">
+            <img src="/img/Three_small_scenes_of_student__2026-07-27T14-59-44.png" alt="三种伴学模式" loading="lazy" />
+            <span className="cap">AI 伴学 / 线上真人 / 线下真人，总有一种适合孩子</span>
+          </div>
+          <div className="mode3">
+            <div className="m3-card reveal">
+              <h3>AI 自助伴学</h3>
+              <p className="price">线上 150 元 / 月</p>
+              <p>APP 随时学，AI 规划+推送+答疑，适合自律性较好的学生。</p>
+            </div>
+            <div className="m3-card reveal">
+              <h3>线上真人伴学</h3>
+              <p className="price">线上 150 元 / 月</p>
+              <p>真人伴学师线上跟踪，远程答疑督学，打破地域限制。</p>
+            </div>
+            <div className="m3-card reveal">
+              <h3>线下真人伴学</h3>
+              <p className="price">线下 180 元 / 月</p>
+              <p>到校区面对面伴学，老师实时答疑，氛围更专注。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. 品牌优势 */}
+      <section className="screen" id="adv">
+        <div className="container">
+          <div className="section-head">
+            <span className="kicker">为什么选慧速学</span>
+            <h2>把提分这件事，做得更科学</h2>
+          </div>
+          <div className="screen-img reveal">
+            <img src="/img/A_bright_modern_education_bran_2026-07-27T15-00-30.png" alt="慧速学学习中心" loading="lazy" />
+            <span className="cap">专业教育品牌，用结果赢得家长信任</span>
+          </div>
+          <div className="adv-grid">
+            {[
+              { t: "更精准", d: "AI 检测漏洞，不做无效努力" },
+              { t: "更高效", d: "只学不会的，省时间提分快" },
+              { t: "更科学", d: "记忆曲线+认知规律做支撑" },
+              { t: "有结果", d: "报告可追踪，进步看得见" },
+            ].map((a) => (
+              <div className="adv-card reveal" key={a.t}>
+                <div className="adv-num">{a.t}</div>
+                <p>{a.d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===== 免费引流 ===== */}
-      <section id="free" className="section-alt">
+      {/* 11. 效果验证 */}
+      <section className="screen dark" id="proof">
         <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">免费引流</span>
-            <h2>3 大免费体验，20 分钟看见效果</h2>
-            <p>现场抽测、当场感受，用结果说话。</p>
+          <div className="section-head light">
+            <span className="kicker">效果验证</span>
+            <h2>看得见的进步，才叫提分</h2>
           </div>
-          <div className="lead-grid">
-            {FREE_LEADS.map((c) => (
-              <div className={`lead-card ${c.kind} reveal`} key={c.type}>
-                <span className="kind">免费</span>
-                <h4>{c.type}</h4>
-                <div className="price-big">{c.price}</div>
-                <div className="line">⏱ {c.unit}</div>
-                <div className="slogans3">“{c.slogan}”</div>
-                {c.lines.map((l) => <div className="line" key={l}>· {l}</div>)}
-                <ul>{c.items.map((i) => <li key={i}>{i}</li>)}</ul>
-                <a className="btn btn-primary" style={{ width: "100%", marginTop: 14 }} href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: c.leadSelect })); smoothTo("signup"); }}>预约此体验</a>
-              </div>
-            ))}
+          <div className="screen-img reveal">
+            <img src="/img/A_confident_successful_Chinese_2026-07-27T14-59-35.png" alt="提分学员" loading="lazy" />
+            <span className="cap">真实学员：找到方法，成绩明显提升</span>
+          </div>
+          <div className="proof-stats">
+            <div className="stat reveal"><b>3000+</b><span>累计服务学员</span></div>
+            <div className="stat reveal"><b>92%</b><span>家长愿意推荐</span></div>
+            <div className="stat reveal"><b>3 天</b><span>背完 3 年核心单词</span></div>
+            <div className="stat reveal"><b>60%</b><span>减少重复练习</span></div>
+          </div>
+          <div className="case reveal">
+            <div className="case-quote">“以前刷题到半夜也没用，做了学习力体检才知道是技巧问题。跟着规划走了一个月，月考数学提了 20 分。”</div>
+            <div className="case-who">— 济南 · 初三学员家长</div>
           </div>
         </div>
       </section>
 
-      {/* ===== 低价引流 ===== */}
-      <section id="paid">
+      {/* 12. 免费体验 + 预约表单 */}
+      <section className="screen" id="signup">
         <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">低价引流</span>
-            <h2>1 对 1 低价课，先体验再决定</h2>
-            <p>线下 19.9 起，线上 49.9 起，全家桶仅 198。</p>
+          <div className="section-head">
+            <span className="kicker">现在免费体验</span>
+            <h2>20 分钟，看清孩子的提分空间</h2>
+            <p className="sub">任选一项免费体验，到店即做、现场出报告，不花一分钱先看到效果。</p>
           </div>
-          <div className="lead-grid">
-            {PAID_LEADS.map((c) => (
-              <div className={`lead-card ${c.kind} reveal`} key={c.type}>
-                <span className="kind">低价</span>
-                <h4>{c.type}</h4>
-                <div className="price-big">{c.price}</div>
-                <div className="line">⏱ {c.unit}</div>
-                <div className="slogans3">“{c.slogan}”</div>
-                {c.lines.map((l) => <div className="line" key={l}>· {l}</div>)}
-                <a className="btn btn-ghost" style={{ width: "100%", marginTop: 14 }} href="#signup" onClick={(e) => { e.preventDefault(); smoothTo("signup"); }}>预约此课程</a>
+          <div className="screen-img reveal">
+            <img src="/img/A_friendly_teacher_welcoming_a_2026-07-27T15-00-31.png" alt="免费体验课" loading="lazy" />
+            <span className="cap">20 分钟免费体验，现场抽测、效果看得见</span>
+          </div>
+          <div className="free3">
+            {FREE_EXP.map((c) => (
+              <div className="free-card reveal" key={c.type}>
+                <span className="free-tag">{c.tag}</span>
+                <h3>{c.type}</h3>
+                <p>{c.desc}</p>
+                <a
+                  className="btn btn-accent"
+                  href="#form"
+                  onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: c.leadSelect })); smoothTo("form"); }}
+                >预约此体验</a>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ===== 发展历程 ===== */}
-      <section className="section-alt">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">发展历程</span>
-            <h2>十年深耕，从作业辅导到 AI 极智考</h2>
-          </div>
-          <div className="cards">
-            {TIMELINE.map((t) => (
-              <div className="card reveal" key={t.y} style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 22, fontWeight: 900, color: "var(--brand)" }}>{t.y}</div>
-                <h3 style={{ marginTop: 8 }}>{t.t}</h3>
-                <p>{t.d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 校区与联系 ===== */}
-      <section id="campus">
-        <div className="container">
-          <div className="section-head reveal">
-            <span className="eyebrow">校区与联系</span>
-            <h2>4 大校区，就近伴学</h2>
-            <p>欢迎到店体验，或电话/微信预约免费测评。</p>
-          </div>
-          <div className="campus-grid">
-            {CAMPUSES.map((c) => (
-              <div className="campus reveal" key={c.name}>
-                <div className="info">
-                  <b>{c.name}</b>
-                  <span>{c.addr}</span>
-                </div>
-                <div className="tel">
-                  <a href={`tel:${c.phone}`}>{c.phone}</a>
-                  <small>{c.teacher}</small>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 预约表单 ===== */}
-      <section id="signup" className="section-alt">
-        <div className="container signup">
-          <div className="signup-copy reveal">
-            <h3>免费预约 20 分钟体验</h3>
-            <p>填写信息，老师会在 1 个工作日内与您联系，安排到店或线上体验。</p>
-            <ul className="perks">
-              <li><span className="ck">✓</span><span>免费学习力体检 / 单词速记 / 中考技巧三选一</span></li>
-              <li><span className="ck">✓</span><span>现场抽测，效果看得见</span></li>
-              <li><span className="ck">✓</span><span>生成专属体检报告与学习建议</span></li>
-              <li><span className="ck">✓</span><span>不推销、不套路，用结果说话</span></li>
-            </ul>
-          </div>
-          <div className="form-card reveal">
-            <form onSubmit={submit}>
+          <div className="signup-card reveal" id="form">
+            <h3>填写信息，老师 1 对 1 联系您</h3>
+            <form className="signup-form" onSubmit={submit}>
               <div className="field">
-                <label>体验类型 *</label>
-                <select value={form.leadType} onChange={(e) => setForm({ ...form, leadType: e.target.value })}>
-                  <option value="学习力体检">免费学习力体检</option>
-                  <option value="单词速记体验">免费单词速记体验</option>
-                  <option value="中考技巧体验">免费中考技巧体验</option>
-                  <option value="低价体验课预约">低价 1 对 1 体验课</option>
-                </select>
-              </div>
-              <div className="field">
-                <label>科目</label>
-                <select value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })}>
-                  <option>数学</option><option>英语</option><option>物理</option>
-                  <option>化学</option><option>语文</option><option>其他</option>
-                </select>
-              </div>
-              <div className="field">
-                <label>意向校区 *</label>
-                <select value={form.campus} onChange={(e) => setForm({ ...form, campus: e.target.value })}>
-                  {CAMPUSES.map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}
-                </select>
+                <label>学生姓名</label>
+                <input
+                  type="text"
+                  placeholder="选填"
+                  value={form.name}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                />
               </div>
               <div className="field">
                 <label>手机号 *</label>
-                <input type="tel" inputMode="numeric" placeholder="用于老师回电联系" value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  placeholder="11 位手机号"
+                  value={form.phone}
+                  onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                />
               </div>
               <div className="field">
-                <label>学生姓名（选填）</label>
-                <input placeholder="如：小明" value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })} />
+                <label>年级</label>
+                <input
+                  type="text"
+                  placeholder="如：初三 / 高二"
+                  value={form.grade}
+                  onChange={(e) => setForm((f) => ({ ...f, grade: e.target.value }))}
+                />
               </div>
               <div className="field">
-                <label>年级（选填）</label>
-                <input placeholder="如：初三" value={form.grade}
-                  onChange={(e) => setForm({ ...form, grade: e.target.value })} />
+                <label>意向校区 *</label>
+                <select
+                  value={form.campus}
+                  onChange={(e) => setForm((f) => ({ ...f, campus: e.target.value }))}
+                >
+                  <option value="">请选择</option>
+                  {CAMPUSES.map((c) => (
+                    <option key={c.name} value={c.name}>{c.name}</option>
+                  ))}
+                </select>
               </div>
-              <button className="btn btn-primary" type="submit" disabled={submitting}>
-                {submitting ? "提交中…" : "提交预约"}
+              <div className="field">
+                <label>体验项目</label>
+                <select
+                  value={form.leadType}
+                  onChange={(e) => setForm((f) => ({ ...f, leadType: e.target.value }))}
+                >
+                  <option value="学习力体检">学习力免费体检</option>
+                  <option value="单词速记体验">免费 AI 单词速记体验</option>
+                  <option value="中考技巧体验">免费中高考技巧体验</option>
+                  <option value="AI满分导航">AI 满分导航咨询</option>
+                </select>
+              </div>
+              <div className="field field-wide">
+                <label>备注</label>
+                <textarea
+                  rows={2}
+                  placeholder="选填，如薄弱科目、方便的时间"
+                  value={form.note}
+                  onChange={(e) => setForm((f) => ({ ...f, note: e.target.value }))}
+                />
+              </div>
+              <button className="btn btn-accent submit-btn" type="submit" disabled={submitting}>
+                {submitting ? "提交中…" : "立即免费预约"}
               </button>
-              <div className={`form-msg ${msg.type}`}>{msg.text}</div>
-              <p className="form-note">提交即表示同意老师与您电话联系，信息仅用于课程预约。</p>
+              {msg && <div className={`form-msg ${msg.type}`}>{msg.text}</div>}
             </form>
           </div>
         </div>
       </section>
 
-      {/* ===== Footer ===== */}
-      <footer className="site-footer">
-        <div className="container footer-grid">
-          <div>
-            <div className="brand-f"><span className="logo">慧</span>慧速学AI伴学中心</div>
-            <p>用 AI 赋能学生学习全过程，助力高效学习、快速提分。<br />孩子的每一分努力，都应有考试分数的回报。</p>
+      {/* 13. 品牌介绍 */}
+      <section className="screen" id="brand">
+        <div className="container">
+          <div className="screen-img reveal">
+            <img src="/img/A_team_of_professional_Chinese_2026-07-27T15-00-33.png" alt="慧速学师资团队" loading="lazy" />
+            <span className="cap">AI 教育专家 + 一线老师，共同打磨科学学习方法</span>
           </div>
-          <div>
-            <h4>核心业务</h4>
-            <a href="#business" onClick={(e) => { e.preventDefault(); smoothTo("business"); }}>AI单词速记</a>
-            <a href="#business" onClick={(e) => { e.preventDefault(); smoothTo("business"); }}>AI满分导航</a>
-            <a href="#business" onClick={(e) => { e.preventDefault(); smoothTo("business"); }}>AI中高考答题技巧</a>
-            <a href="#business" onClick={(e) => { e.preventDefault(); smoothTo("business"); }}>AI智能伴学系统</a>
-          </div>
-          <div>
-            <h4>联系我们</h4>
-            <a href="tel:18631199225">桥西·于老师 18631199225</a>
-            <a href="tel:18633499596">新华·李老师 18633499596</a>
-            <a href="tel:13073112715">长安·刘老师 13073112715</a>
-            <a href="tel:13223402764">高新·崔老师 13223402764</a>
+          <div className="brand-intro reveal">
+            <span className="kicker">关于慧速学</span>
+            <h2>让每个孩子，都找到适合自己的学习方法</h2>
+            <p>
+              慧速学 AI 伴学中心，聚焦中学全科托管。我们以 AI 精准分析为底座，
+              结合真人伴学落地执行，帮助孩子用更短的时间、更科学的方式实现提分。
+              使命是「让学习更高效」，愿景是「成为家长最信赖的 AI 伴学品牌」。
+            </p>
           </div>
         </div>
-        <div className="container footer-bottom">
-          © {new Date().getFullYear()} 慧速学AI伴学中心 · 中学全科托管 · AI极智考　|　冀ICP备暂无（部署后补充）
+      </section>
+
+      {/* 14. 校区 */}
+      <section className="screen" id="campus">
+        <div className="container">
+          <div className="section-head">
+            <span className="kicker">4 大校区 · 就近入学</span>
+            <h2>离家近的校区，更方便坚持</h2>
+          </div>
+          <div className="screen-img reveal">
+            <img src="/img/Interior_of_a_modern_tutoring__2026-07-27T15-00-34.png" alt="校区环境" loading="lazy" />
+            <span className="cap">明亮舒适的学习中心，给孩子专注的学习环境</span>
+          </div>
+          <div className="campus-grid">
+            {CAMPUSES.map((c) => (
+              <div className="campus-card reveal" key={c.name}>
+                <h3>{c.name}</h3>
+                <p className="addr">{c.addr}</p>
+                <a className="tel" href={`tel:${c.tel.replace(/\s/g, "")}`}>老师电话：{c.tel}</a>
+              </div>
+            ))}
+          </div>
         </div>
-      </footer>
+      </section>
+
+      {/* 15. 成交收口 */}
+      <section className="screen cta-close" id="close">
+        <div className="container">
+          <div className="section-head light">
+            <span className="kicker">现在就开始</span>
+            <h2>免费体检一次，看清提分空间</h2>
+            <p className="sub">不报班也能先做检测，看到报告再决定。把选择权交给效果。</p>
+          </div>
+          <div className="screen-img reveal">
+            <img src="/img/A_happy_Chinese_parent__studen_2026-07-27T15-00-35.png" alt="家长学生老师合影" loading="lazy" />
+            <span className="cap">现在预约免费体验，让改变从今天开始</span>
+          </div>
+          <div className="mini-flow reveal">
+            <span>免费预约</span><i>→</i><span>到店体检</span><i>→</i><span>出报告</span><i>→</i><span>定制规划</span>
+          </div>
+          <div className="close-cta reveal">
+            <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "学习力体检" })); smoothTo("signup"); }}>免费预约体验</a>
+            <a className="btn btn-ghost-light" href="#campus" onClick={(e) => { e.preventDefault(); smoothTo("campus"); }}>查看校区电话</a>
+          </div>
+        </div>
+      </section>
+
+      {/* 固定底部栏 */}
+      <div className="footbar">
+        <a className="foot-btn primary" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "学习力体检" })); smoothTo("signup"); }}>
+          <span className="fb-ico">✦</span>免费测评
+        </a>
+        <a className="foot-btn ghost" href="#campus" onClick={(e) => { e.preventDefault(); smoothTo("campus"); }}>
+          <span className="fb-ico">☎</span>联系老师
+        </a>
+      </div>
     </>
   );
 }
