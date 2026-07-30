@@ -179,23 +179,27 @@ export default function Page() {
             <span className="kicker">为什么孩子努力却没效果</span>
             <h2>不是孩子不努力，是方法没找对</h2>
           </div>
-          <div className="screen-img reveal">
-            <img src="/img/A_worried_Chinese_parent_and_c_2026-07-27T14-59-01.png" alt="家长与孩子的学习焦虑" loading="lazy" />
-            <span className="cap">很多努力，却看不到提升——问题往往不在努力，而在方法</span>
-          </div>
-          <div className="pain-grid">
-            {[
-              { t: "熬夜刷题成绩却原地踏步", d: "时间花了，分数没动，越学越没信心" },
-              { t: "报了很多班还是不会做", d: "大班统一讲，孩子听不懂的没人补" },
-              { t: "知识点越漏越多", d: "前面没懂，后面更难，恶性循环" },
-              { t: "考试总是发挥失常", d: "会做的丢分，不会的干瞪眼" },
-            ].map((p) => (
-              <div className="pain-card reveal" key={p.t}>
-                <div className="pain-ico">!</div>
-                <h3>{p.t}</h3>
-                <p>{p.d}</p>
+          <div className="split">
+            <div className="split-media screen-img reveal">
+              <img src="/img/A_worried_Chinese_parent_and_c_2026-07-27T14-59-01.png" alt="家长与孩子的学习焦虑" loading="lazy" />
+              <span className="cap">很多努力，却看不到提升——问题往往不在努力，而在方法</span>
+            </div>
+            <div className="split-body">
+              <div className="pain-grid">
+                {[
+                  { t: "熬夜刷题成绩却原地踏步", d: "时间花了，分数没动，越学越没信心" },
+                  { t: "报了很多班还是不会做", d: "大班统一讲，孩子听不懂的没人补" },
+                  { t: "知识点越漏越多", d: "前面没懂，后面更难，恶性循环" },
+                  { t: "考试总是发挥失常", d: "会做的丢分，不会的干瞪眼" },
+                ].map((p) => (
+                  <div className="pain-card reveal" key={p.t}>
+                    <div className="pain-ico">!</div>
+                    <h3>{p.t}</h3>
+                    <p>{p.d}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
           <p className="pain-quote reveal">真正的差距，不是谁更努力，而是谁先看清问题。</p>
         </div>
@@ -250,25 +254,29 @@ export default function Page() {
             <h2>AI 规划 + 真人伴学 = 1 + 1 &gt; 2</h2>
             <p className="sub">AI 负责精准与效率，真人负责陪伴与落地，两者缺一不可。</p>
           </div>
-          <div className="screen-img reveal">
-            <img src="/img/A_human_tutor_or_teacher_guidi_2026-07-27T14-59-03.png" alt="真人老师陪伴指导" loading="lazy" />
-            <span className="cap">AI 精准规划 + 真人老师陪伴，学习效果 1+1&gt;2</span>
-          </div>
-          <div className="mode-grid">
-            <div className="mode-card reveal">
-              <div className="mode-ico ai">AI</div>
-              <h3>AI 精准规划</h3>
-              <p>检测漏洞、生成最短提分路径、智能推送练习与复习，让学习有迹可循。</p>
+          <div className="split rev">
+            <div className="split-body">
+              <div className="mode-grid">
+                <div className="mode-card reveal">
+                  <div className="mode-ico ai">AI</div>
+                  <h3>AI 精准规划</h3>
+                  <p>检测漏洞、生成最短提分路径、智能推送练习与复习，让学习有迹可循。</p>
+                </div>
+                <div className="mode-card reveal">
+                  <div className="mode-ico person">师</div>
+                  <h3>真人伴学落地</h3>
+                  <p>一线老师与专业伴学师陪伴执行，答疑解惑、督促节奏、调整状态。</p>
+                </div>
+                <div className="mode-card reveal">
+                  <div className="mode-ico family">家</div>
+                  <h3>家长看得见的成长</h3>
+                  <p>学习报告同步家长，每次进步都清晰可见，不再焦虑等待考试成绩。</p>
+                </div>
+              </div>
             </div>
-            <div className="mode-card reveal">
-              <div className="mode-ico person">师</div>
-              <h3>真人伴学落地</h3>
-              <p>一线老师与专业伴学师陪伴执行，答疑解惑、督促节奏、调整状态。</p>
-            </div>
-            <div className="mode-card reveal">
-              <div className="mode-ico family">家</div>
-              <h3>家长看得见的成长</h3>
-              <p>学习报告同步家长，每次进步都清晰可见，不再焦虑等待考试成绩。</p>
+            <div className="split-media screen-img reveal">
+              <img src="/img/A_human_tutor_or_teacher_guidi_2026-07-27T14-59-03.png" alt="真人老师陪伴指导" loading="lazy" />
+              <span className="cap">AI 精准规划 + 真人老师陪伴，学习效果 1+1&gt;2</span>
             </div>
           </div>
         </div>
@@ -277,10 +285,6 @@ export default function Page() {
       {/* 5. AI 满分导航 */}
       <section className="screen" id="nav">
         <div className="container">
-          <div className="screen-img reveal">
-            <img src="/img/A_glowing_AI_analytics_dashboa_2026-07-27T14-59-04.png" alt="AI 学习分析报告" loading="lazy" />
-            <span className="cap">AI 满分导航：先检测、再规划，只学不会的内容</span>
-          </div>
           <div className="biz reveal">
             <div className="biz-text">
               <span className="kicker">核心业务 01</span>
@@ -295,13 +299,19 @@ export default function Page() {
               </ul>
               <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "AI满分导航" })); smoothTo("signup"); }}>预约免费体验</a>
             </div>
-            <div className="biz-media">
-              <div className="media-card">
-                <div className="mc-title">本周学习路径</div>
-                <div className="mc-row"><span>函数零点</span><b className="hot">重点补</b></div>
-                <div className="mc-row"><span>几何证明</span><b>巩固</b></div>
-                <div className="mc-row"><span>概率统计</span><b>已掌握</b></div>
-                <div className="mc-foot">预计节省 60% 重复练习</div>
+            <div className="biz-visual">
+              <div className="screen-img">
+                <img src="/img/A_glowing_AI_analytics_dashboa_2026-07-27T14-59-04.png" alt="AI 学习分析报告" loading="lazy" />
+                <span className="cap">AI 满分导航：先检测、再规划，只学不会的内容</span>
+              </div>
+              <div className="biz-media">
+                <div className="media-card">
+                  <div className="mc-title">本周学习路径</div>
+                  <div className="mc-row"><span>函数零点</span><b className="hot">重点补</b></div>
+                  <div className="mc-row"><span>几何证明</span><b>巩固</b></div>
+                  <div className="mc-row"><span>概率统计</span><b>已掌握</b></div>
+                  <div className="mc-foot">预计节省 60% 重复练习</div>
+                </div>
               </div>
             </div>
           </div>
@@ -311,20 +321,7 @@ export default function Page() {
       {/* 6. 看见问题（学习报告） */}
       <section className="screen" id="report">
         <div className="container">
-          <div className="screen-img reveal">
-            <img src="/img/A_detailed_math_diagnostic_rep_2026-07-27T14-59-50.png" alt="数学能力诊断报告" loading="lazy" />
-            <span className="cap">用报告看清：孩子哪里薄弱、为什么失分、如何提升</span>
-          </div>
           <div className="biz rev reveal">
-            <div className="biz-media">
-              <div className="media-card report">
-                <div className="mc-title">学习力诊断报告</div>
-                <div className="mc-bar"><i style={{ width: "48%" }} /><span>知识掌握 48%</span></div>
-                <div className="mc-bar"><i style={{ width: "62%" }} /><span>解题能力 62%</span></div>
-                <div className="mc-bar"><i style={{ width: "55%" }} /><span>答题技巧 55%</span></div>
-                <div className="mc-foot">薄弱点：函数 · 受力分析 · 完形逻辑</div>
-              </div>
-            </div>
             <div className="biz-text">
               <span className="kicker">核心业务 02</span>
               <h2>看见真问题</h2>
@@ -337,6 +334,21 @@ export default function Page() {
               </ul>
               <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "学习力体检" })); smoothTo("signup"); }}>免费做一次体检</a>
             </div>
+            <div className="biz-visual">
+              <div className="screen-img">
+                <img src="/img/A_detailed_math_diagnostic_rep_2026-07-27T14-59-50.png" alt="数学能力诊断报告" loading="lazy" />
+                <span className="cap">用报告看清：孩子哪里薄弱、为什么失分、如何提升</span>
+              </div>
+              <div className="biz-media">
+                <div className="media-card report">
+                  <div className="mc-title">学习力诊断报告</div>
+                  <div className="mc-bar"><i style={{ width: "48%" }} /><span>知识掌握 48%</span></div>
+                  <div className="mc-bar"><i style={{ width: "62%" }} /><span>解题能力 62%</span></div>
+                  <div className="mc-bar"><i style={{ width: "55%" }} /><span>答题技巧 55%</span></div>
+                  <div className="mc-foot">薄弱点：函数 · 受力分析 · 完形逻辑</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -344,10 +356,6 @@ export default function Page() {
       {/* 7. AI 单词速记 */}
       <section className="screen" id="word">
         <div className="container">
-          <div className="screen-img reveal">
-            <img src="/img/A_teenage_student_memorizing_E_2026-07-27T14-59-32.png" alt="AI 单词速记" loading="lazy" />
-            <span className="cap">海马体记忆法，3 天背完 3 年核心单词</span>
-          </div>
           <div className="biz reveal">
             <div className="biz-text">
               <span className="kicker">核心业务 03</span>
@@ -361,13 +369,19 @@ export default function Page() {
               </ul>
               <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "单词速记体验" })); smoothTo("signup"); }}>预约单词体验</a>
             </div>
-            <div className="biz-media">
-              <div className="media-card">
-                <div className="mc-title">今日速记</div>
-                <div className="mc-row"><span>abandon → 放弃</span><b className="hot">新学</b></div>
-                <div className="mc-row"><span>benefit → 益处</span><b className="hot">新学</b></div>
-                <div className="mc-row"><span>consider → 考虑</span><b>复习</b></div>
-                <div className="mc-foot">已掌握 120 / 今日目标 60</div>
+            <div className="biz-visual">
+              <div className="screen-img">
+                <img src="/img/A_teenage_student_memorizing_E_2026-07-27T14-59-32.png" alt="AI 单词速记" loading="lazy" />
+                <span className="cap">海马体记忆法，3 天背完 3 年核心单词</span>
+              </div>
+              <div className="biz-media">
+                <div className="media-card">
+                  <div className="mc-title">今日速记</div>
+                  <div className="mc-row"><span>abandon → 放弃</span><b className="hot">新学</b></div>
+                  <div className="mc-row"><span>benefit → 益处</span><b className="hot">新学</b></div>
+                  <div className="mc-row"><span>consider → 考虑</span><b>复习</b></div>
+                  <div className="mc-foot">已掌握 120 / 今日目标 60</div>
+                </div>
               </div>
             </div>
           </div>
@@ -377,20 +391,7 @@ export default function Page() {
       {/* 8. AI 中高考答题技巧 */}
       <section className="screen" id="exam">
         <div className="container">
-          <div className="screen-img reveal">
-            <img src="/img/A_student_taking_an_exam_with__2026-07-27T14-59-33.png" alt="中高考答题技巧" loading="lazy" />
-            <span className="cap">会题做得更快，不会题也能提高得分率</span>
-          </div>
           <div className="biz rev reveal">
-            <div className="biz-media">
-              <div className="media-card">
-                <div className="mc-title">答题技巧对应图</div>
-                <div className="mc-row"><span>选择题</span><b className="hot">排除·代入</b></div>
-                <div className="mc-row"><span>填空题</span><b>逆向·特值</b></div>
-                <div className="mc-row"><span>大题</span><b>步骤·踩分</b></div>
-                <div className="mc-foot">数学/英语/物理/化学 通用</div>
-              </div>
-            </div>
             <div className="biz-text">
               <span className="kicker">核心业务 04</span>
               <h2>AI 中高考答题技巧</h2>
@@ -404,6 +405,21 @@ export default function Page() {
               </ul>
               <a className="btn btn-accent" href="#signup" onClick={(e) => { e.preventDefault(); setForm((f) => ({ ...f, leadType: "中考技巧体验" })); smoothTo("signup"); }}>预约技巧体验</a>
             </div>
+            <div className="biz-visual">
+              <div className="screen-img">
+                <img src="/img/A_student_taking_an_exam_with__2026-07-27T14-59-33.png" alt="中高考答题技巧" loading="lazy" />
+                <span className="cap">会题做得更快，不会题也能提高得分率</span>
+              </div>
+              <div className="biz-media">
+                <div className="media-card">
+                  <div className="mc-title">答题技巧对应图</div>
+                  <div className="mc-row"><span>选择题</span><b className="hot">排除·代入</b></div>
+                  <div className="mc-row"><span>填空题</span><b>逆向·特值</b></div>
+                  <div className="mc-row"><span>大题</span><b>步骤·踩分</b></div>
+                  <div className="mc-foot">数学/英语/物理/化学 通用</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -416,25 +432,29 @@ export default function Page() {
             <h2>AI 智能伴学系统</h2>
             <p className="sub">一套系统，三种陪伴方式，让孩子随时有人管、有人教、有人陪。</p>
           </div>
-          <div className="screen-img reveal">
-            <img src="/img/Three_small_scenes_of_student__2026-07-27T14-59-44.png" alt="三种伴学模式" loading="lazy" />
-            <span className="cap">AI 伴学 / 线上真人 / 线下真人，总有一种适合孩子</span>
-          </div>
-          <div className="mode3">
-            <div className="m3-card reveal">
-              <h3>AI 自助伴学</h3>
-              <p className="price">线上 150 元 / 月</p>
-              <p>APP 随时学，AI 规划+推送+答疑，适合自律性较好的学生。</p>
+          <div className="split">
+            <div className="split-media screen-img reveal">
+              <img src="/img/Three_small_scenes_of_student__2026-07-27T14-59-44.png" alt="三种伴学模式" loading="lazy" />
+              <span className="cap">AI 伴学 / 线上真人 / 线下真人，总有一种适合孩子</span>
             </div>
-            <div className="m3-card reveal">
-              <h3>线上真人伴学</h3>
-              <p className="price">线上 150 元 / 月</p>
-              <p>真人伴学师线上跟踪，远程答疑督学，打破地域限制。</p>
-            </div>
-            <div className="m3-card reveal">
-              <h3>线下真人伴学</h3>
-              <p className="price">线下 180 元 / 月</p>
-              <p>到校区面对面伴学，老师实时答疑，氛围更专注。</p>
+            <div className="split-body">
+              <div className="mode3">
+                <div className="m3-card reveal">
+                  <h3>AI 自助伴学</h3>
+                  <p className="price">线上 150 元 / 月</p>
+                  <p>APP 随时学，AI 规划+推送+答疑，适合自律性较好的学生。</p>
+                </div>
+                <div className="m3-card reveal">
+                  <h3>线上真人伴学</h3>
+                  <p className="price">线上 150 元 / 月</p>
+                  <p>真人伴学师线上跟踪，远程答疑督学，打破地域限制。</p>
+                </div>
+                <div className="m3-card reveal">
+                  <h3>线下真人伴学</h3>
+                  <p className="price">线下 180 元 / 月</p>
+                  <p>到校区面对面伴学，老师实时答疑，氛围更专注。</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -447,22 +467,26 @@ export default function Page() {
             <span className="kicker">为什么选慧速学</span>
             <h2>把提分这件事，做得更科学</h2>
           </div>
-          <div className="screen-img reveal">
-            <img src="/img/A_bright_modern_education_bran_2026-07-27T15-00-30.png" alt="慧速学学习中心" loading="lazy" />
-            <span className="cap">专业教育品牌，用结果赢得家长信任</span>
-          </div>
-          <div className="adv-grid">
-            {[
-              { t: "更精准", d: "AI 检测漏洞，不做无效努力" },
-              { t: "更高效", d: "只学不会的，省时间提分快" },
-              { t: "更科学", d: "记忆曲线+认知规律做支撑" },
-              { t: "有结果", d: "报告可追踪，进步看得见" },
-            ].map((a) => (
-              <div className="adv-card reveal" key={a.t}>
-                <div className="adv-num">{a.t}</div>
-                <p>{a.d}</p>
+          <div className="split">
+            <div className="split-media screen-img reveal">
+              <img src="/img/A_bright_modern_education_bran_2026-07-27T15-00-30.png" alt="慧速学学习中心" loading="lazy" />
+              <span className="cap">专业教育品牌，用结果赢得家长信任</span>
+            </div>
+            <div className="split-body">
+              <div className="adv-grid">
+                {[
+                  { t: "更精准", d: "AI 检测漏洞，不做无效努力" },
+                  { t: "更高效", d: "只学不会的，省时间提分快" },
+                  { t: "更科学", d: "记忆曲线+认知规律做支撑" },
+                  { t: "有结果", d: "报告可追踪，进步看得见" },
+                ].map((a) => (
+                  <div className="adv-card reveal" key={a.t}>
+                    <div className="adv-num">{a.t}</div>
+                    <p>{a.d}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
@@ -594,18 +618,20 @@ export default function Page() {
       {/* 13. 品牌介绍 */}
       <section className="screen" id="brand">
         <div className="container">
-          <div className="screen-img reveal">
-            <img src="/img/A_team_of_professional_Chinese_2026-07-27T15-00-33.png" alt="慧速学师资团队" loading="lazy" />
-            <span className="cap">AI 教育专家 + 一线老师，共同打磨科学学习方法</span>
-          </div>
-          <div className="brand-intro reveal">
-            <span className="kicker">关于慧速学</span>
-            <h2>让每个孩子，都找到适合自己的学习方法</h2>
-            <p>
-              慧速学 AI 伴学中心，聚焦中学全科托管。我们以 AI 精准分析为底座，
-              结合真人伴学落地执行，帮助孩子用更短的时间、更科学的方式实现提分。
-              使命是「让学习更高效」，愿景是「成为家长最信赖的 AI 伴学品牌」。
-            </p>
+          <div className="split">
+            <div className="split-media screen-img reveal">
+              <img src="/img/A_team_of_professional_Chinese_2026-07-27T15-00-33.png" alt="慧速学师资团队" loading="lazy" />
+              <span className="cap">AI 教育专家 + 一线老师，共同打磨科学学习方法</span>
+            </div>
+            <div className="split-body brand-intro reveal">
+              <span className="kicker">关于慧速学</span>
+              <h2>让每个孩子，都找到适合自己的学习方法</h2>
+              <p>
+                慧速学 AI 伴学中心，聚焦中学全科托管。我们以 AI 精准分析为底座，
+                结合真人伴学落地执行，帮助孩子用更短的时间、更科学的方式实现提分。
+                使命是「让学习更高效」，愿景是「成为家长最信赖的 AI 伴学品牌」。
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -617,18 +643,22 @@ export default function Page() {
             <span className="kicker">4 大校区 · 就近入学</span>
             <h2>离家近的校区，更方便坚持</h2>
           </div>
-          <div className="screen-img reveal">
-            <img src="/img/Interior_of_a_modern_tutoring__2026-07-27T15-00-34.png" alt="校区环境" loading="lazy" />
-            <span className="cap">明亮舒适的学习中心，给孩子专注的学习环境</span>
-          </div>
-          <div className="campus-grid">
-            {CAMPUSES.map((c) => (
-              <div className="campus-card reveal" key={c.name}>
-                <h3>{c.name}</h3>
-                <p className="addr">{c.addr}</p>
-                <a className="tel" href={`tel:${c.tel.replace(/\s/g, "")}`}>老师电话：{c.tel}</a>
+          <div className="split rev">
+            <div className="split-media screen-img reveal">
+              <img src="/img/Interior_of_a_modern_tutoring__2026-07-27T15-00-34.png" alt="校区环境" loading="lazy" />
+              <span className="cap">明亮舒适的学习中心，给孩子专注的学习环境</span>
+            </div>
+            <div className="split-body">
+              <div className="campus-grid">
+                {CAMPUSES.map((c) => (
+                  <div className="campus-card reveal" key={c.name}>
+                    <h3>{c.name}</h3>
+                    <p className="addr">{c.addr}</p>
+                    <a className="tel" href={`tel:${c.tel.replace(/\s/g, "")}`}>老师电话：{c.tel}</a>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>

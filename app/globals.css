@@ -326,6 +326,21 @@ img { max-width: 100%; display: block; }
 .foot-btn.ghost:hover { background: #D6E6FF; }
 .fb-ico { font-size: 15px; }
 
+/* ===== 分屏排版：图片与文字左右分布，打破每屏配图千篇一律的横幅样式 ===== */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; margin: 6px auto 34px; }
+.split.rev .split-media { order: 2; }
+.split-media { min-width: 0; }
+.split-body { min-width: 0; }
+.split .screen-img { margin: 0; }
+.split .pain-grid { grid-template-columns: 1fr 1fr; }
+.split .mode-grid { grid-template-columns: 1fr; }
+.split .mode3 { grid-template-columns: 1fr; }
+.split .adv-grid { grid-template-columns: 1fr 1fr; }
+.split .brand-intro { text-align: left; margin: 0; max-width: none; }
+/* 业务屏：配图与数据卡合并为同侧视觉列 */
+.biz-visual { display: flex; flex-direction: column; gap: 22px; }
+.biz-visual .screen-img { margin: 0; }
+
 /* ===== Reveal 动画 ===== */
 .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
 .reveal.in { opacity: 1; transform: none; }
@@ -338,14 +353,15 @@ img { max-width: 100%; display: block; }
     display: flex; flex-direction: column; gap: 14px; position: absolute; top: 62px; left: 0; right: 0;
     background: #fff; border-bottom: 1px solid var(--line); padding: 16px 20px; box-shadow: var(--shadow-md);
   }
-  .hero-grid, .vs-wrap, .mode-grid, .biz, .brand-intro, .campus-grid { grid-template-columns: 1fr; }
-  .biz.rev .biz-media { order: 0; }
+  .hero-grid, .vs-wrap, .mode-grid, .biz, .brand-intro, .campus-grid, .split { grid-template-columns: 1fr; }
+  .split.rev .split-media { order: 0; }
+  .biz.rev .biz-text { order: 0; }
   .pain-grid, .adv-grid, .free3, .mode3, .proof-stats, .flow { grid-template-columns: 1fr 1fr; }
   .vs-mid { transform: rotate(90deg); justify-self: center; }
   .screen { padding: 52px 0; }
 }
 @media (max-width: 560px) {
-  .pain-grid, .adv-grid, .free3, .mode3, .proof-stats, .flow { grid-template-columns: 1fr; }
+  .pain-grid, .adv-grid, .free3, .mode3, .proof-stats, .flow, .split .pain-grid, .split .adv-grid { grid-template-columns: 1fr; }
   .signup-form { grid-template-columns: 1fr; }
   .hero-cta, .close-cta { flex-direction: column; }
   .hero-cta .btn, .close-cta .btn { width: 100%; }
